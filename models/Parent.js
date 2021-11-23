@@ -10,11 +10,11 @@ const ParentSchema=new mongoose.Schema({
         required:true
     },
     Email:{
-        type: Email,
+        type: String,
         required: true
     },
     Password:{
-        type: Password,
+        type: String,
         required: true
     },
 

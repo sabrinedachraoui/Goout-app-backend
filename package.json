@@ -1,19 +1,28 @@
 {
   "name": "nodemongo",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "devstart": "nodemon server.js"
+    "devstart": "nodemon server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.13"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.14"
-  }
+    "nodemon": "^2.0.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabrinedachraoui/Goout-app-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sabrinedachraoui/Goout-app-backend/issues"
+  },
+  "homepage": "https://github.com/sabrinedachraoui/Goout-app-backend#readme",
+  "description": ""
 }
