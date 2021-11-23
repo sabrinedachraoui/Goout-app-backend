@@ -10,7 +10,7 @@ const KidSchema=new mongoose.Schema({
         required:true
     },
     Email:{
-        type: Email,
+        type: String,
         required: true
     },
     Password:{
