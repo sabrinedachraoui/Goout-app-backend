@@ -7,16 +7,14 @@ const ParentSchema=new mongoose.Schema({
     },
     Last_name:{
         type: String,
-        required:true
+        required:true,
     },
     Email:{
         type: Email,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
     },
-    Password:{
-        type: Password,
-        required: true
-    },
-
 });
-module.exports=mongoose.model('Parent',ParentSchema)
+module.exports=mongoose.model('Kids',KidSchema)
