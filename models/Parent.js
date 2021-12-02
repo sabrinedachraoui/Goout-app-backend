@@ -1,22 +1,18 @@
-const mongoose=require('mongoose');
+const mongoose = require("mongoose");
+//define a new data object
 
-const ParentSchema=new mongoose.Schema({
-    name:{
-        type: String,
-        required: true
-    },
-    Last_name:{
-        type: String,
-        required:true
-    },
-    Email:{
-        type: String,
-        required: true
-    },
-    Password:{
-        type: String,
-        required: true
-    },
-
+const UserSchema = new mongoose.Schema({
+        name: { type: String },
+        email: { type: String },
+        address: { type: String },
+        password: { type: String },
+        role: { type: String },
+        Kids:[{
+                type: mongoose.SchemaTypes.ObjectId, ref: 'Kids',
+        }]
+        
 });
-module.exports=mongoose.model('Parent',ParentSchema)
+
+//we want to export this file to the server so it can see the schema
+//the data is the student we made
+module.exports = mongoose.model("parent", UserSchema);

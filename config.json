@@ -1,0 +1,4 @@
+{
+  "database": "mongodb+srv://salah:SD2511999@cluster0.r1yhq.mongodb.net/test",
+  "token_secret": "token-secret !!"
+}
