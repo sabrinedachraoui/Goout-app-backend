@@ -224,6 +224,8 @@ exports.confirmation = async (req, res) => {
     });
 }
 
+
+
 exports.forgotPassword = async (req, res) => {
     const resetCode = req.body.resetCode
     const user = await User.findOne({ "email": req.body.email });
