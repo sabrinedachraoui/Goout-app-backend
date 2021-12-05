@@ -21,12 +21,18 @@ const ParentSchema=new mongoose.Schema({
         type: String,
         required: true,
     },
-    picture:{
+    Picture:{
         type: String,
     },
     Kids:[{
         type: mongoose.SchemaTypes.ObjectId, ref: 'Kids',
-    }]
+    }],
+    role: 
+        {
+            type: String,
+            default:"parent",
+        }
+      
     
 
 });
