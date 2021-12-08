@@ -15,7 +15,7 @@ const ParentSchema=new mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        match: /.+\@.+\..+/
+       //match: /.+\@.+\..+/
     },
     Password:{
         type: String,
