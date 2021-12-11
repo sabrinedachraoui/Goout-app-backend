@@ -10,5 +10,6 @@ const { GetParentbymail, authentificateToken } = require('../controllers/Parent.
 router.post('/RegisterParent',multer,ParentController.RegisterParent)
 router.post('/Login',GetParentbymail,ParentController.login)
 router.get('/getall',ParentController.Getall)
+router.post('/Registerkids',ParentController.RegisterKid)
 
 module.exports = router;

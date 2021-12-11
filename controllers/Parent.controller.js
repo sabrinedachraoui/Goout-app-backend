@@ -3,14 +3,12 @@ const jwt = require("jsonwebtoken");
 const multer = require("../Middleware/multer.config");
 const nodemailer = require("nodemailer");
 const Parent = require("../models/Parent.model");
-const Kids = require("../models/Kid.model");
+const Kid = require("../models/Kid.model");
 
 module.exports = {
   Getall: async(req,res)=>{
-    const users = await Parent.find()
-                              .populate('Kids')
-                              .exec()
-  
+    const users = await Parent.find().populate().exec()
+                              
 
     if (users) {
         res.status(200).send({ users, message: "success" })
@@ -95,7 +93,7 @@ module.exports = {
   RegisterKid: async (req, res) => {
     await Kid.init();
     const hashedPass = await Bcrypt.hash(req.body.Password, 10);
-    Kid = new Kid({
+    kid = new Kid({
       Name: req.body.Name,
       Last_name: req.body.Last_name,
       Email: req.body.Email,
@@ -103,7 +101,7 @@ module.exports = {
     });
     try {
       const newkid = await kid.save();
-      res.status(201).json({ Kid: newkid, reponse: "good" });
+      res.status(201).json({ kid: newkid, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
