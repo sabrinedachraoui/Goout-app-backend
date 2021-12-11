@@ -25,9 +25,9 @@ const ParentSchema=new mongoose.Schema({
         type: String,
     },
     Kids:[{
-        type: mongoose.SchemaTypes.ObjectId, ref: 'Kids',
+        type: mongoose.SchemaTypes.ObjectId, ref: 'Kid',
     }],
-    role: 
+    Role: 
         {
             type: String,
             default:"parent",

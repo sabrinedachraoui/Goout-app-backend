@@ -3,16 +3,21 @@ const jwt = require("jsonwebtoken");
 const multer = require("../Middleware/multer.config");
 const nodemailer = require("nodemailer");
 const Parent = require("../models/Parent.model");
-const Kids = require("../models/Kids.model");
+const Kids = require("../models/Kid.model");
+
 module.exports = {
   Getall: async(req,res)=>{
-    const users = await Parent.find({})
+    const users = await Parent.find()
+                              .populate('Kids')
+                              .exec()
+  
 
     if (users) {
         res.status(200).send({ users, message: "success" })
     } else {
         res.status(403).send({ message: "fail" })
     }
+    
   },
   RegisterParent: async (req, res) => {
     await Parent.init();
@@ -51,7 +56,15 @@ module.exports = {
       res.status(400).json({ reponse: error });
     }
   },
+  GetallKids: async(req,res)=>{
+    const users = await Parent.find({})
 
+    if (users) {
+        res.status(200).send({ users, message: "success" })
+    } else {
+        res.status(403).send({ message: "fail" })
+    }
+  },
   GetParentbymail: async (req, res, next) => {
     let parent;
     try {
@@ -64,6 +77,7 @@ module.exports = {
       return res.status(500).json({ reponse: error.message });
     }
     res.Parent = parent;
+    console.log(parent)
     next();
   },
   authentificateToken: (req, res, next) => {
@@ -79,19 +93,57 @@ module.exports = {
     });
   },
   RegisterKid: async (req, res) => {
-    await Kids.init();
+    await Kid.init();
     const hashedPass = await Bcrypt.hash(req.body.Password, 10);
-    parent = new Parent({
+    Kid = new Kid({
       Name: req.body.Name,
       Last_name: req.body.Last_name,
       Email: req.body.Email,
       Password: hashedPass,
     });
     try {
-      const newParent = await parent.save();
-      res.status(201).json({ Parent: newParent, reponse: "good" });
+      const newkid = await kid.save();
+      res.status(201).json({ Kid: newkid, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
   },
+   envoyerEmailDeConfirmation: async(email, token)=> {
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'theemail@gmail.com',
+        pass: 'the password'
+      }
+    })
+  
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error)
+        console.log("Server not ready")
+      } else {
+        console.log("Server is ready to take our messages")
+      }
+    })
+  
+    const urlDeConfirmation = "http://localhost:3000/api.chicky.com/utilisateur/confirmation/" + token
+  
+    const mailOptions = {
+      from: 'Goout@gmail.com',
+      to: email,
+      subject: 'Confirmation de votre email',
+      html: "<h3>Veuillez confirmer votre email en cliquant sur ce lien : </h3><a href='" + urlDeConfirmation + "'>Confirmation</a>"
+    }
+  
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent: ' + info.response)
+      }
+    })
+  },
+  
+
 };

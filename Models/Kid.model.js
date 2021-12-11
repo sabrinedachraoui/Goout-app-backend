@@ -17,11 +17,13 @@ const KidSchema=new mongoose.Schema({
         trim: true,
     },
     Password:{type: String},
-    Location:[{
-        type: mongoose.SchemaTypes.ObjectId, ref: 'Location',
-    }],
-    health:[{
-        type: mongoose.SchemaTypes.ObjectId, ref: 'health',
+    Parent: { type: mongoose.SchemaTypes.ObjectId, ref: 'Parent'},
+    isverified:{
+        type: Boolean,
+        default : false,
+    },
+    Task:[{
+        type: mongoose.SchemaTypes.ObjectId, ref: 'Task',
     }],
 });
 module.exports=mongoose.model('Kids',KidSchema)
