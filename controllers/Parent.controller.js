@@ -3,16 +3,31 @@ const jwt = require("jsonwebtoken");
 const multer = require("../Middleware/multer.config");
 const nodemailer = require("nodemailer");
 const Parent = require("../models/Parent.model");
-const Kids = require("../models/Kids.model");
+const Kid = require("../models/Kid.model");
+const Task = require("../models/Task.model")
+
 module.exports = {
   Getall: async(req,res)=>{
-    const users = await Parent.find({})
+    const users = await Parent.find().populate("Kids").exec()
+                              
 
     if (users) {
         res.status(200).send({ users, message: "success" })
     } else {
         res.status(403).send({ message: "fail" })
     }
+    
+  },
+  Profile: async(req,res) => {
+    const users = await Parent.findById(req.params._id)
+                              
+
+    if (users) {
+        res.status(200).send({ users, message: "success" })
+    } else {
+        res.status(403).send({ message: "fail" })
+    }
+    
   },
   RegisterParent: async (req, res) => {
     await Parent.init();
@@ -23,10 +38,6 @@ module.exports = {
       Last_name: req.body.Last_name,
       Email: req.body.Email,
       Password: hashedPass,
-      /*Picture: `${req.protocol}://${req.get("host")}/Uploads/${
-        req.file.filename
-      }`,*/
-      Kids: null,
     });
     try {
       const newParent = await parent.save();
@@ -34,6 +45,7 @@ module.exports = {
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
+
   },
   login: async (req, res) => {
     if (res.Parent == null) {
@@ -52,7 +64,15 @@ module.exports = {
       res.status(400).json({ reponse: error });
     }
   },
+  GetallKids: async(req,res)=>{
+    const users = await Parent.find({})
 
+    if (users) {
+        res.status(200).send({ users, message: "success" })
+    } else {
+        res.status(403).send({ message: "fail" })
+    }
+  },
   GetParentbymail: async (req, res, next) => {
     let parent;
     try {
@@ -65,6 +85,7 @@ module.exports = {
       return res.status(500).json({ reponse: error.message });
     }
     res.Parent = parent;
+    console.log(parent)
     next();
   },
   authentificateToken: (req, res, next) => {
@@ -80,19 +101,43 @@ module.exports = {
     });
   },
   RegisterKid: async (req, res) => {
-    await Kids.init();
+    await Kid.init();
     const hashedPass = await Bcrypt.hash(req.body.Password, 10);
-    parent = new Parent({
+    tfol = new Kid({
       Name: req.body.Name,
       Last_name: req.body.Last_name,
       Email: req.body.Email,
       Password: hashedPass,
     });
+    const parent = await Parent.findById({_id:req.params._id});
     try {
-      const newParent = await parent.save();
-      res.status(201).json({ Parent: newParent, reponse: "good" });
+      parent.Kids.push(tfol)
+      parent.save()
+      const newkid = await tfol.save();
+      res.status(201).json({ tfol: newkid, reponse: "good" });
+    } catch (error) {
+      res.status(400).json({ reponse: error.message });
+    }
+    
+  },
+  AddTask: async (req,res) =>{
+    await Task.init();
+    thetask = new Task({
+    Name: req.body.Name,
+    Description : req.body.Description
+    })
+    const tfol = await Kid.findById({_id:req.params._id})
+    try {
+      tfol.Tasks.push(thetask)
+      tfol.save()
+      const newtask = await thetask.save();
+      res.status(201).json({ thetask: newtask, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
   },
+  changeimage: async (req,res)=>{
+    
+  }
+
 };
