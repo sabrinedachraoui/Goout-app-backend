@@ -16,7 +16,8 @@ module.exports = {
   },
   RegisterParent: async (req, res) => {
     await Parent.init();
-    const hashedPass = await Bcrypt.hash(req.body.Password, 10);
+    console.log(req.body)
+    const hashedPass = await Bcrypt.hash(req.body.Password, 10);   
     parent = new Parent({
       Name: req.body.Name,
       Last_name: req.body.Last_name,
