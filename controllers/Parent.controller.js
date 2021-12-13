@@ -35,13 +35,13 @@ module.exports = {
     const hashedPass = await Bcrypt.hash(req.body.Password, 10);   
     parent = new Parent({
       Name: req.body.Name,
-      Last_name: req.body.Last_name,
+      Last_name: req.body.Last_Name,
       Email: req.body.Email,
       Password: hashedPass,
     });
     try {
-      const newParent = await parent.save();
-      res.status(201).json({ Parent: newParent, reponse: "good" });
+      parent.save();
+      res.status(201).json({ parent, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
