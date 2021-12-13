@@ -22,7 +22,7 @@ const KidSchema=new mongoose.Schema({
         type: Boolean,
         default : false,
     },
-    Task:[{
+    Tasks:[{
         type: mongoose.SchemaTypes.ObjectId, ref: 'Task',
     }],
 });

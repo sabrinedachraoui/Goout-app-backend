@@ -4,10 +4,22 @@ const multer = require("../Middleware/multer.config");
 const nodemailer = require("nodemailer");
 const Parent = require("../models/Parent.model");
 const Kid = require("../models/Kid.model");
+const Task = require("../models/Task.model")
 
 module.exports = {
   Getall: async(req,res)=>{
     const users = await Parent.find().populate("Kids").exec()
+                              
+
+    if (users) {
+        res.status(200).send({ users, message: "success" })
+    } else {
+        res.status(403).send({ message: "fail" })
+    }
+    
+  },
+  Profile: async(req,res) => {
+    const users = await Parent.findById(req.params._id)
                               
 
     if (users) {
@@ -96,7 +108,7 @@ module.exports = {
       Email: req.body.Email,
       Password: hashedPass,
     });
-    const parent = await Parent.findById({_id:"61b6882f9c035b18d5cbc99a"});
+    const parent = await Parent.findById({_id:req.params._id});
     try {
       parent.Kids.push(tfol)
       parent.save()
@@ -107,6 +119,24 @@ module.exports = {
     }
     
   },
-  
+  AddTask: async (req,res) =>{
+    await Task.init();
+    thetask = new Task({
+    Name: req.body.Name,
+    Description : req.body.Description
+    })
+    const tfol = await Kid.findById({_id:req.params._id})
+    try {
+      tfol.Tasks.push(thetask)
+      tfol.save()
+      const newtask = await thetask.save();
+      res.status(201).json({ thetask: newtask, reponse: "good" });
+    } catch (error) {
+      res.status(400).json({ reponse: error.message });
+    }
+  },
+  changeimage: async (req,res)=>{
+    
+  }
 
 };
