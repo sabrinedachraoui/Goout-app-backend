@@ -26,4 +26,4 @@ const KidSchema=new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId, ref: 'Task',
     }],
 });
-module.exports=mongoose.model('Kids',KidSchema)
+module.exports=mongoose.model('Kid',KidSchema)

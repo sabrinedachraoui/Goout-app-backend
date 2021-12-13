@@ -7,7 +7,7 @@ const Kid = require("../models/Kid.model");
 
 module.exports = {
   Getall: async(req,res)=>{
-    const users = await Parent.find().populate().exec()
+    const users = await Parent.find().populate("Kids").exec()
                               
 
     if (users) {
@@ -25,10 +25,6 @@ module.exports = {
       Last_name: req.body.Last_name,
       Email: req.body.Email,
       Password: hashedPass,
-      /*Picture: `${req.protocol}://${req.get("host")}/Uploads/${
-        req.file.filename
-      }`,*/
-      Kids: null,
     });
     try {
       const newParent = await parent.save();
@@ -36,6 +32,7 @@ module.exports = {
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
+
   },
   login: async (req, res) => {
     if (res.Parent == null) {
@@ -93,54 +90,22 @@ module.exports = {
   RegisterKid: async (req, res) => {
     await Kid.init();
     const hashedPass = await Bcrypt.hash(req.body.Password, 10);
-    kid = new Kid({
+    tfol = new Kid({
       Name: req.body.Name,
       Last_name: req.body.Last_name,
       Email: req.body.Email,
       Password: hashedPass,
     });
+    const parent = await Parent.findById({_id:"61b6882f9c035b18d5cbc99a"});
     try {
-      const newkid = await kid.save();
-      res.status(201).json({ kid: newkid, reponse: "good" });
+      parent.Kids.push(tfol)
+      parent.save()
+      const newkid = await tfol.save();
+      res.status(201).json({ tfol: newkid, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });
     }
-  },
-   envoyerEmailDeConfirmation: async(email, token)=> {
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'theemail@gmail.com',
-        pass: 'the password'
-      }
-    })
-  
-    transporter.verify(function (error, success) {
-      if (error) {
-        console.log(error)
-        console.log("Server not ready")
-      } else {
-        console.log("Server is ready to take our messages")
-      }
-    })
-  
-    const urlDeConfirmation = "http://localhost:3000/api.chicky.com/utilisateur/confirmation/" + token
-  
-    const mailOptions = {
-      from: 'Goout@gmail.com',
-      to: email,
-      subject: 'Confirmation de votre email',
-      html: "<h3>Veuillez confirmer votre email en cliquant sur ce lien : </h3><a href='" + urlDeConfirmation + "'>Confirmation</a>"
-    }
-  
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error)
-      } else {
-        console.log('Email sent: ' + info.response)
-      }
-    })
+    
   },
   
 
