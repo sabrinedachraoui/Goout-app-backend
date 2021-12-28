@@ -137,6 +137,57 @@ module.exports = {
   },
   changeimage: async (req,res)=>{
     
+  },
+  motDePasseOublie: async (req, res) => {
+    const codeDeReinit = req.body.codeDeReinit
+    const utilisateur = await Utilisateur.findOne({ "email": req.body.email })
+  
+    if (utilisateur) {
+      // token creation
+      const token = jwt.sign({ _id: utilisateur._id, email: utilisateur.email }, config.token_secret, {
+        expiresIn: "3600000", // in Milliseconds (3600000 = 1 hour)
+      })
+  
+      envoyerEmailReinitialisation(req.body.email, codeDeReinit)
+  
+      res.status(200).send({ "message": "L'email de reinitialisation a été envoyé a " + utilisateur.email })
+    } else {
+      res.status(404).send({ "message": "Utilisateur innexistant" })
+    }
+  },
+  
+   envoyerEmailReinitialisation: async (email, codeDeReinit)=> {
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: '',
+        pass: ''
+      }
+    })
+  
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error)
+        console.log("Server not ready")
+      } else {
+        console.log("Server is ready to take our messages")
+      }
+    })
+  
+    const mailOptions = {
+      from: '',
+      to: email,
+      subject: 'Reinitialisation de votre mot de passe - Chicky',
+      html: "<h3>Vous avez envoyé une requete de reinitialisation de mot de passe </h3><p>Entrez ce code dans l'application pour proceder : <b style='color : blue'>" + codeDeReinit + "</b></p>"
+    }
+  
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent : ' + info.response)
+      }
+    })
   }
 
 };
