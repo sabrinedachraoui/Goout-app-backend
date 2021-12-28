@@ -49,14 +49,13 @@ module.exports = {
 
   },
   login: async (req, res) => {
-    if (res.Parent == null) {
-      return res.status(404).send("Utilisateur introuvable");
-    }
+    parent = await Parent.findOne({ Email: req.body.Email });
     try {
-      if (await Bcrypt.compare(req.body.Password, res.Parent.Password)) {
+      if (await Bcrypt.compare(req.body.Password, res.parent.Password)) {
         const token = jwt.sign({ Email: res.Parent.Email }, "SECRET");
         if (token) {
           res.json({ token, Parent: res.Parent, reponse: "good" });
+          res.send(parent);
         }
       } else {
         res.status(400).json({ reponse: "mdp incorrect" });
@@ -172,7 +171,7 @@ module.exports = {
     const mailOptions = {
       from: '',
       to: email,
-      subject: 'Reinitialisation de votre mot de passe - Chicky',
+      subject: 'Reinitialisation de votre mot de passe ',
       html: "<h3>Vous avez envoyé une requete de reinitialisation de mot de passe </h3><p>Entrez ce code dans l'application pour proceder : <b style='color : blue'>" + codeDeReinit + "</b></p>"
     }
   
@@ -183,6 +182,30 @@ module.exports = {
         console.log('Email sent : ' + info.response)
       }
     })
-  }
+  },
+  SigninwithSocialmedia: async (req, res) => {
 
+    const { Email, Name } = req.body
+  
+    if (Email === "") {
+      res.status(403).send({ message: "error please provide an email" })
+    } else {
+      var parent = await Parent.findOne({ Email })
+      if (parent) {
+        console.log("user exists, loging in")
+      } else {
+        console.log("user does not exists, creating an account")
+  
+        theparent = new Parent()
+  
+        theparent.Name = Name
+        theparent.Email = Email
+        theparent.Last_Name = null
+        theparent.Password = null
+        theparent.save()
+      }
+      // token creation
+      res.status(201).send({ message: "success", theparent })
+    }
+  }
 };
