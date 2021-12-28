@@ -17,7 +17,7 @@ const KidSchema=new mongoose.Schema({
         trim: true,
     },
     Password:{type: String},
-    Parent: { type: mongoose.SchemaTypes.ObjectId, ref: 'Parent'},
+    Myparent: { type: mongoose.SchemaTypes.ObjectId, ref: 'Parent'},
     isverified:{
         type: Boolean,
         default : false,

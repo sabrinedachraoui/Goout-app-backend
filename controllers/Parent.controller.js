@@ -8,7 +8,7 @@ const Task = require("../models/Task.model")
 
 module.exports = {
   Getall: async(req,res)=>{
-    const users = await Parent.find().populate("Kids").exec()
+    const users = await Parent.find()
                               
 
     if (users) {
@@ -39,6 +39,7 @@ module.exports = {
       Email: req.body.Email,
       Password: hashedPass,
     });
+    console.log(parent)
     try {
       parent.save();
       res.status(201).json({ parent, reponse: "good" });
@@ -64,15 +65,7 @@ module.exports = {
       res.status(400).json({ reponse: error });
     }
   },
-  GetallKids: async(req,res)=>{
-    const users = await Parent.find({})
-
-    if (users) {
-        res.status(200).send({ users, message: "success" })
-    } else {
-        res.status(403).send({ message: "fail" })
-    }
-  },
+  
   GetParentbymail: async (req, res, next) => {
     let parent;
     try {
@@ -108,6 +101,7 @@ module.exports = {
       Last_name: req.body.Last_name,
       Email: req.body.Email,
       Password: hashedPass,
+      Myparent: req.params._id
     });
     const parent = await Parent.findById({_id:req.params._id});
     try {
