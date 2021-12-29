@@ -5,10 +5,7 @@ const KidSchema=new mongoose.Schema({
         type: String,
         required: true
     },
-    Last_name:{
-        type: String,
-        required:true,
-    },
+   
     Email:{
         type: String,
         required: true,

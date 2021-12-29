@@ -35,7 +35,6 @@ module.exports = {
     const hashedPass = await Bcrypt.hash(req.body.Password, 10);   
     parent = new Parent({
       Name: req.body.Name,
-      Last_name: req.body.Last_Name,
       Email: req.body.Email,
       Password: hashedPass,
     });
@@ -204,7 +203,7 @@ module.exports = {
         theparent.Password = null
         theparent.save()
       }
-      // token creation
+      // token creation not available yet
       res.status(201).send({ message: "success", theparent })
     }
   }

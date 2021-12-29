@@ -5,10 +5,7 @@ const ParentSchema=new mongoose.Schema({
         type: String,
        
     },
-    Last_name:{
-        type: String,
     
-    },
     Email:{
         type: String,
         
