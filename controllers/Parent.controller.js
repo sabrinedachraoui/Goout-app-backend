@@ -12,7 +12,7 @@ module.exports = {
                               
 
     if (users) {
-        res.status(200).send({ users, message: "success" })
+        res.status(200).json({ users, message: "success" })
     } else {
         res.status(403).send({ message: "fail" })
     }
@@ -48,19 +48,21 @@ module.exports = {
 
   },
   login: async (req, res) => {
-    parent = await Parent.findOne({ Email: req.body.Email });
+    parent = await Parent.findOne({ Email: req.body.Email }).populate('Kids');
     try {
-      if (await Bcrypt.compare(req.body.Password, res.parent.Password)) {
-        const token = jwt.sign({ Email: res.Parent.Email }, "SECRET");
+      console.log(req.body.Password);
+      console.log(parent.Password);
+      
+      if (await Bcrypt.compare(req.body.Password, parent.Password)) {
+        const token = jwt.sign({ Email: parent.Email }, "SECRET");
         if (token) {
-          res.json({ token, Parent: res.Parent, reponse: "good" });
-          res.send(parent);
+          res.json({ token, Parent: parent, reponse: "good" });
         }
       } else {
         res.status(400).json({ reponse: "mdp incorrect" });
       }
     } catch (error) {
-      res.status(400).json({ reponse: error });
+      res.status(500).json({ reponse: error });
     }
   },
   
