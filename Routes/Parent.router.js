@@ -15,4 +15,5 @@ router.post('/:_id/Registerkids',ParentController.RegisterKid)
 router.post('/LoginwithSocial',ParentController.SigninwithSocialmedia)
 router.post('/Addtask',ParentController.AddTask)
 router.get('/:_id/getkids',KidController.Getkids)
+router.post('/passforget', ParentController.motDePasseOublie)
 module.exports = router;
