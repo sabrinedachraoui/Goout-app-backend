@@ -8,7 +8,15 @@ Getkids: async(req,res)=>{
            res.json({kids:kids})
         
     } catch (error) {
-  res.status(500).json(error)     
+  res.status(500).json(error)}
+        },
+Gettasks : async(req,res)=>{
+  try {    const tasks = await Task.find({kid:req.params._id})
+
+         res.json({Tasks:tasks})
+      
+  } catch (error) {
+res.status(500).json(error)
     } 
 
 }

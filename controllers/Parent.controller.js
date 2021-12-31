@@ -47,15 +47,30 @@ module.exports = {
     }
 
   },
-  login: async (req, res) => {
+  loginParent: async (req, res) => {
     parent = await Parent.findOne({ Email: req.body.Email }).populate('Kids');
+    
     try {
-      
-      
       if (await Bcrypt.compare(req.body.Password, parent.Password)) {
         const token = jwt.sign({ Email: parent.Email }, "SECRET");
         if (token) {
           res.json({ token, Parent: parent, reponse: "good" });
+        }
+      } else {
+        res.status(400).json({ reponse: "mdp incorrect" });
+      }
+    } catch (error) {
+      res.status(500).json({ reponse: error });
+    }
+  },
+  loginKid: async (req, res) => {
+    thekid = await Kid.findOne({ Email: req.body.Email }).populate('Tasks');
+    
+    try {
+      if (await Bcrypt.compare(req.body.Password, parent.Password)) {
+        const token = jwt.sign({ Email: thekid.Email }, "SECRET");
+        if (token) {
+          res.json({ token, Kid: thekid, reponse: "good" });
         }
       } else {
         res.status(400).json({ reponse: "mdp incorrect" });
@@ -103,10 +118,11 @@ module.exports = {
       Myparent: req.params._id
     });
     const parent = await Parent.findById({_id:req.params._id});
+    console.log(parent)
     try {
+      const newkid = await tfol.save();
       parent.Kids.push(tfol)
       parent.save()
-      const newkid = await tfol.save();
       res.status(201).json({ tfol: newkid, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });
@@ -117,13 +133,14 @@ module.exports = {
     await Task.init();
     thetask = new Task({
     Name: req.body.Name,
-    Description : req.body.Description
+    Description : req.body.Description,
+    kid : req.params._id
     })
     const tfol = await Kid.findById({_id:req.params._id})
     try {
+      const newtask = await thetask.save();
       tfol.Tasks.push(thetask)
       tfol.save()
-      const newtask = await thetask.save();
       res.status(201).json({ thetask: newtask, reponse: "good" });
     } catch (error) {
       res.status(400).json({ reponse: error.message });

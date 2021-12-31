@@ -12,6 +12,7 @@ const TaskSchema=new mongoose.Schema({
     Status:{
         type: String,
         default: "doing", 
-    }
+    },
+    kid: { type: mongoose.SchemaTypes.ObjectId, ref: 'Kid'}
 });
 module.exports=mongoose.model('Task',TaskSchema)
