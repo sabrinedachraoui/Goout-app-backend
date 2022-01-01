@@ -54,7 +54,7 @@ module.exports = {
       if (await Bcrypt.compare(req.body.Password, parent.Password)) {
         const token = jwt.sign({ Email: parent.Email }, "SECRET");
         if (token) {
-          res.json({ token, Parent: parent, reponse: "good" });
+          res.status(201).json({ token, Parent: parent, reponse: "good" });
         }
       } else {
         res.status(400).json({ reponse: "mdp incorrect" });
@@ -65,18 +65,19 @@ module.exports = {
   },
   loginKid: async (req, res) => {
     thekid = await Kid.findOne({ Email: req.body.Email }).populate('Tasks');
-    
     try {
-      if (await Bcrypt.compare(req.body.Password, parent.Password)) {
+      if (await Bcrypt.compare(req.body.Password, thekid.Password)) {
         const token = jwt.sign({ Email: thekid.Email }, "SECRET");
         if (token) {
-          res.json({ token, Kid: thekid, reponse: "good" });
+          res.status(201).json({ token, Kid: thekid, reponse: "good" })
         }
       } else {
         res.status(400).json({ reponse: "mdp incorrect" });
+        console.log("status 400")
       }
     } catch (error) {
       res.status(500).json({ reponse: error });
+      console.log("status 500")
     }
   },
   

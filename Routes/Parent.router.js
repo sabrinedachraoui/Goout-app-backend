@@ -10,7 +10,7 @@ const KidController = require('../controllers/Kid.controller');
  */
 router.post('/RegisterParent',ParentController.RegisterParent)
 router.post('/Loginparent',ParentController.loginParent)
-router.post('/loginkid',ParentController.loginKid)
+router.post('/Loginkid',ParentController.loginKid)
 router.get('/getall',ParentController.Getall)
 router.post('/:_id/Registerkids',ParentController.RegisterKid)
 router.post('/LoginwithSocial',ParentController.SigninwithSocialmedia)
