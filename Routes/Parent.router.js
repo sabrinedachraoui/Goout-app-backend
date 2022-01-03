@@ -18,4 +18,5 @@ router.get('/:_id/getkids',KidController.Getkids)
 router.post('/passforget', ParentController.motDePasseOublie)
 router.post('/:_id/addtask',ParentController.AddTask)
 router.get('/:_id/gettasks',KidController.Gettasks)
+router.put('/changepass',ParentController.changerMotDePasse)
 module.exports = router;

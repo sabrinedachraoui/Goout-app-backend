@@ -152,8 +152,9 @@ module.exports = {
   },
   changerMotDePasse: async (req, res) => {
     const { Email, nouveauMotDePasse } = req.body
+    console.log(req.body)
   
-    nouveauMdpEncrypted = await bcypt.hash(nouveauMotDePasse, 10)
+    nouveauMdpEncrypted = await Bcrypt.hash(nouveauMotDePasse, 10)
   
     let parent = await Parent.findOneAndUpdate(
       { Email: Email },
@@ -164,12 +165,11 @@ module.exports = {
       }
     )
   
-    res.send({ utilisateur })
+    res.send({ parent })
   },
   motDePasseOublie: async (req, res) => {
     const codeDeReinit = req.body.codeDeReinit
     const parent = await Parent.findOne({ "Email": req.body.Email })
-    console.log(req.body)
     if (parent) {
       // token creation
       const token = jwt.sign({ Email: parent.Email }, "SECRET");
@@ -217,8 +217,8 @@ async function envoyerEmailReinitialisation (Email, codeDeReinit) {
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'salah.dabbech@esprit.tn',
-      pass: '181JMT0347'
+      user: 'thegooutapp@gmail.com',
+      pass: 'goout1234'
     }
   })
 
